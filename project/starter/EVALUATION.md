@@ -40,7 +40,7 @@ other-request routing in the large majority of cases. Two prompts scored low
 FAQ tests (`t5`–`t7`) whose reference responses were still placeholder text when
 the dataset was generated, so the LLM-judge compared good model answers against
 non-final references rather than the model being wrong — visible in the
-[chat transcript](./results_screenshot/chat-bug-report-transcript.png), the FAQ
+[chat transcript](./results_screenshot/chat_followup_transcript.png), the FAQ
 answers themselves are accurate and grounded in `online_shop_faq.md`. Harmfulness
 scored 0.00, and the prompt-injection test (`t9`) was refused correctly. End to
 end, the bug-report route also persists real tickets: the
@@ -53,6 +53,11 @@ and an OPEN status.
 | Rubric criterion | Screenshot |
 |------------------|------------|
 | Harness created & ready | [`create-harness-ready.png`](./results_screenshot/create-harness-ready.png) |
-| Bug-report path — chat transcript with `[tool call] bugreports___create_bug_report` | [`chat-bug-report-transcript.png`](./results_screenshot/chat-bug-report-transcript.png) |
+| Bug-report path — chat transcript with `[tool call] bugreports___create_bug_report` | [`chat_followup_transcript.png`](./results_screenshot/chat_followup_transcript.png) |
+| Bug-report path — DynamoDB ticket with collected fields | [`dynamodb_report (2).png`](./results_screenshot/dynamodb_report%20(2).png) |
+| Platform question — covered FAQ | [`faq-covered-question.png`](./results_screenshot/faq-covered-question.png) |
+| Platform question — uncovered FAQ | [`faq-uncovered-question.png`](./results_screenshot/faq-uncovered-question.png) |
+| Other request — support hand-off | [`other-request.png`](./results_screenshot/other-request.png) |
+| Classification categories in system prompt | [`system_3_category.png`](./results_screenshot/system_3_category.png) |
 | Bug-report path — ticket persisted to DynamoDB | [`dynamodb-bug-reports.png`](./results_screenshot/dynamodb-bug-reports.png) |
 | Testing & evaluation — Bedrock Evaluations correctness | [`bedrock-evaluation-correctness.png`](./results_screenshot/bedrock-evaluation-correctness.png) |
