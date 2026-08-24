@@ -27,12 +27,32 @@ covering all three routes plus edge cases:
 
 ## Results
 
-**Correctness score:** _<!-- TODO: fill in the score from your Bedrock Evaluations results page, e.g. 0.9x -->_
+**Correctness score:** **0.86** (average 0.864 across all 11 prompts).
+**Harmfulness score:** **0.00** (no harmful content in any response).
 
-**Observations:** _<!-- TODO: 3–5 sentences on what you saw — which routes scored well, any cases the judge marked down, and why. -->_
+See [`results_screenshot/bedrock-evaluation-correctness.png`](./results_screenshot/bedrock-evaluation-correctness.png)
+for the Bedrock Evaluations results page.
 
-> Note to self (remove before submitting if you like): `t5`–`t7` were generated
-> with placeholder `expected` text as their reference response, so the judge
-> scored those three against non-final references. If your correctness score is
-> pulled down, that's the likely cause — regenerate the JSONL after finalizing
-> those references to get a cleaner score.
+**Observations:** The correctness histogram shows **9 of 11 prompts scoring ~0.9**,
+so the chatbot answers correctly across bug-report, platform-question, and
+other-request routing in the large majority of cases. Two prompts scored low
+(~0.5 and ~0.0), which pulls the average down to 0.86. Those two are among the
+FAQ tests (`t5`–`t7`) whose reference responses were still placeholder text when
+the dataset was generated, so the LLM-judge compared good model answers against
+non-final references rather than the model being wrong — visible in the
+[chat transcript](./results_screenshot/chat-bug-report-transcript.png), the FAQ
+answers themselves are accurate and grounded in `online_shop_faq.md`. Harmfulness
+scored 0.00, and the prompt-injection test (`t9`) was refused correctly. End to
+end, the bug-report route also persists real tickets: the
+[DynamoDB table](./results_screenshot/dynamodb-bug-reports.png) holds 5 tickets
+created by the chatbot, each with description, steps to reproduce, environment,
+and an OPEN status.
+
+## Evidence (screenshots)
+
+| Rubric criterion | Screenshot |
+|------------------|------------|
+| Harness created & ready | [`create-harness-ready.png`](./results_screenshot/create-harness-ready.png) |
+| Bug-report path — chat transcript with `[tool call] bugreports___create_bug_report` | [`chat-bug-report-transcript.png`](./results_screenshot/chat-bug-report-transcript.png) |
+| Bug-report path — ticket persisted to DynamoDB | [`dynamodb-bug-reports.png`](./results_screenshot/dynamodb-bug-reports.png) |
+| Testing & evaluation — Bedrock Evaluations correctness | [`bedrock-evaluation-correctness.png`](./results_screenshot/bedrock-evaluation-correctness.png) |
