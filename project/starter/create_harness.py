@@ -30,6 +30,18 @@ import boto3
 
 FAQ_PLACEHOLDER = "{{FAQ}}"
 
+# Cross-session memory is DISABLED on purpose. This chatbot must collect the
+# bug description, steps, and environment WITHIN a single conversation and only
+# from the customer. The harness's default managed memory (a SEMANTIC strategy)
+# recalls facts from earlier conversations — e.g. a device mentioned in a past
+# test — and injects them into new sessions, so the model "knows" an
+# environment the customer never gave and files a ticket with fabricated
+# details. Disabling memory makes every conversation start blank. (Within-turn
+# history for the active session is handled by the runtimeSessionId and is not
+# affected by this setting.)
+MEMORY_DISABLED_CREATE = {"disabled": {}}
+MEMORY_DISABLED_UPDATE = {"optionalValue": {"disabled": {}}}
+
 # Greedy decoding (temperature 0 + topK 1) is AWS's recommendation for
 # reliable tool calling with Nova models.
 def model_config(model_id):
@@ -125,6 +137,7 @@ def main():
             executionRoleArn=config["harness_execution_role_arn"],
             model=model_config(args.model),
             systemPrompt=[{"text": prompt}],
+            memory=MEMORY_DISABLED_UPDATE,
         )
     else:
         print(f"Creating harness '{args.name}' (takes ~2-3 minutes)...")
@@ -138,6 +151,7 @@ def main():
                     executionRoleArn=config["harness_execution_role_arn"],
                     model=model_config(args.model),
                     systemPrompt=[{"text": prompt}],
+                    memory=MEMORY_DISABLED_CREATE,
                 )
                 break
             except Exception as exc:  # noqa: BLE001
